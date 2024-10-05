@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transaction Reports</title>
+<style>
+body {
+    font-family: Arial, sans-serif;
+    background-color: #fff8e1; /* Light yellow background */
+    color: #333; /* Dark text for readability */
+    margin: 0;
+    padding: 20px;
+}
+
+/* Header */
+h2 {
+    color: #ff9800; /* Orange for headings */
+    text-align: center;
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+/* Table styles */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+    background-color: #ffffff; /* White background for table */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+th {
+    background-color: #ffb74d; /* Lighter orange for headers */
+    color: white;
+    padding: 12px;
+    text-align: left;
+    font-weight: bold;
+    border-bottom: 2px solid #ffa726;
+}
+
+td {
+    padding: 12px;
+    border-bottom: 1px solid #ffe0b2; /* Light yellow border */
+}
+
+tr:nth-child(even) {
+    background-color: #fff3e0; /* Light orange for alternate rows */
+}
+
+/* Hover effect */
+tr:hover {
+    background-color: #ffe082; /* Highlight row on hover with yellow */
+}
+
+/* Button styles */
+button {
+    background-color: #ff9800; /* Orange buttons */
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #f57c00; /* Darker orange on hover */
+}
+
+/* Footer */
+footer {
+    text-align: center;
+    padding: 10px;
+    background-color: #ffcc80; /* Light orange background for footer */
+    color: #333;
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+}
+</style>
+
+    <script>
+        function loadReports() {
+            fetch('fetch_reports.php')
+            .then(response => response.json())
+            .then(data => {
+                // Update Inventory Report
+                let inventory = document.getElementById('inventory-report');
+                inventory.innerHTML = '';
+                data.inventory.forEach(item => {
+                    inventory.innerHTML += `<tr>
+                                              <td>${item.product_name}</td>
+                                              <td>${item.quantity_in_stock}</td>
+                                              <td>${item.last_updated}</td>
+                                           </tr>`;
+                });
+
+                // Update Sales Report
+                let sales = document.getElementById('sales-report');
+                sales.innerHTML = '';
+                data.sales.forEach(item => {
+                    sales.innerHTML += `<tr>
+                                          <td>${item.product_id}</td>
+                                          <td>${item.total_sold}</td>
+                                          <td>${item.sale_date}</td>
+                                       </tr>`;
+                });
+
+                // Update Order Tracking
+                let orders = document.getElementById('order-tracking');
+                orders.innerHTML = '';
+                data.orders.forEach(order => {
+                    orders.innerHTML += `<tr>
+                                           <td>${order.order_id}</td>
+                                           <td>${order.customer_id}</td>
+                                           <td>${order.product_id}</td>
+                                           <td>${order.quantity_ordered}</td>
+                                           <td>${order.order_status}</td>
+                                           <td>${order.order_date}</td>
+                                        </tr>`;
+                });
+            });
+        }
+
+        // Refresh every 30 seconds
+        setInterval(loadReports, 30000);
+        window.onload = loadReports;
+    </script>
+</head>
+<body>
+
+    <h2>Monthly Inventory Report</h2>
+    <table id="inventory-report">
+        <thead>
+            <tr>
+                <th>Product Name</th>
+                <th>Quantity in Stock</th>
+                <th>Last Updated</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+    <h2>Monthly Sales Report</h2>
+    <table id="sales-report">
+        <thead>
+            <tr>
+                <th>Product ID</th>
+                <th>Total Sold</th>
+                <th>Sale Date</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+    <h2>Order Tracking</h2>
+    <table id="order-tracking">
+        <thead>
+            <tr>
+                <th>Order ID</th>
+                <th>Customer ID</th>
+                <th>Product ID</th>
+                <th>Quantity Ordered</th>
+                <th>Status</th>
+                <th>Order Date</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+</body>
+</html>
